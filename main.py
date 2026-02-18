@@ -41,3 +41,20 @@ print("\n===== Sklearn KNN =====")
 print("Accuracy:", sk_model_accuracy)
 print(conf_matrix_2)
 
+#-------Stratified K-Fold Cross Validation-------
+skf=StratifiedKFold(n_splits=8,shuffle=True,random_state=7)
+
+scores=[]
+
+for train_index,val_index in skf.split(X,y):
+    X_train,y_train=X[train_index],y[train_index]
+    X_val,y_val=X[val_index],y[val_index]
+    model=KNN(k=5)
+    model.fit(X_train,y_train)
+    predictions=[model.predict(x) for x in X_val]
+    scores.append(accuracy_score(y_val,predictions))
+
+#---------Results of Stratified K-Fold Cross Validation---------
+print("\nStratified K-Fold Cross Validation Scores:", scores)
+print("Mean CV Accuracy:", f"{np.mean(scores):.4f}")
+print("Std CV Accuracy:", f"{np.std(scores):.4f}")
